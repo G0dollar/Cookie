@@ -1,0 +1,459 @@
+<html>
+<head>
+  <title>COOKIE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  * {
+  -webkit-tap-highlight-color: transparent;
+}
+ button:focus {
+  outline: none;
+}
+
+    body {
+  margin: 0;
+  padding: 0;
+  font-family: "Trebuchet MS", sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
+    url("wood.jpg");
+
+  background-size: cover;
+  background-attachment: fixed;
+}
+    #loginBox {
+  background:
+    linear-gradient(#fff8e1, #edd2a5),
+    url("wood-soft.jpg");
+
+  background-size: cover;
+
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 3px solid #8b5a2b;
+
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.35);
+}
+
+.stats {
+  width: 90%;
+  max-width: 600px;
+
+  display: flex;
+  justify-content: space-between;
+
+  margin: 12px 0;
+  padding: 12px 18px;
+
+  background:
+    linear-gradient(#f6e3c2, #e2c89c),
+    url("wood-light.jpg");
+
+  background-size: cover;
+
+  border-radius: 14px;
+  border: 2px solid #7a4a24;
+
+  box-shadow:
+    0 6px 10px rgba(0,0,0,0.35);
+}
+
+    .cookie-count, .cps {
+      font-size: 1.2em;
+    }
+
+    .cookie-btn {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: none;
+  
+
+  background:
+    radial-gradient(circle at top left, #ffffff44, #00000044),
+    url("cookies.jpg");
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  cursor: pointer;
+  margin: 20px 0;
+
+  box-shadow:
+    0 16px 24px rgba(0,0,0,0.4),
+    inset -6px -6px 10px rgba(0,0,0,0.35),
+    inset 6px 6px 10px rgba(255,255,255,0.4);
+}
+
+    .cookie-btn:active {
+      transform: scale(0.95);
+    }
+
+.open-upgrades {
+  padding: 12px 26px;
+  font-size: 1em;
+  cursor: pointer;
+
+  border-radius: 12px;
+  border: 3px solid #7a4a24;
+
+  background:
+    linear-gradient(#f6e3c2, #e2c89c),
+    url("wood-soft.jpg");
+
+  background-size: cover;
+
+  box-shadow:
+    0 6px 10px rgba(0,0,0,0.35),
+    inset 0 1px 2px rgba(255,255,255,0.5);
+
+  margin-bottom: 10px;
+}
+h3 {
+  margin-top: 0;
+  text-align: center;
+
+  color: #5a2f14;
+  text-shadow:
+    1px 1px 0 #f8e6c0,
+    -1px -1px 0 #7a4a24;
+}
+
+.open-upgrades:active {
+  transform: translateY(2px);
+}
+
+
+    .upgrades {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+
+  background:
+    linear-gradient(#ffffffcc, #e8e0d0cc),
+    url("wood-light.jpg");
+
+  background-size: cover;
+
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 20px;
+
+  border-top: 6px solid #6b3e1e;
+  border-radius: 20px 20px 0 0;
+
+  box-shadow:
+    0 -10px 25px rgba(0,0,0,0.35),
+    inset 0 2px 6px rgba(255,255,255,0.4);
+
+  overflow-y: auto;
+}
+
+    .upgrades.active {
+      transform: translateY(0);
+    }
+   .active-upgrades {
+     margin-right:auto;
+   }
+   .passive-upgrades {
+     margin-left: auto;
+   }
+   .active-upgrades,
+.passive-upgrades {
+  width: 45%;
+
+  background:
+    linear-gradient(#fff8e1dd, #efe3c4dd),
+    url("wood-soft.jpg");
+
+  background-size: cover;
+
+  border-radius: 14px;
+  padding: 10px;
+
+  border: 3px solid #8b5a2b;
+
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.3),
+    inset 0 1px 3px rgba(255,255,255,0.5);
+
+  overflow-y: auto;
+}
+
+
+    table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 6px;
+}
+
+    td {
+  border: 1px solid #7a4a24;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+
+  background:
+    linear-gradient(#fff4da, #edd2a5);
+
+  transition: all 0.15s ease;
+}
+
+td:hover {
+  background:
+    linear-gradient(#ffe08a, #ffcc55);
+  transform: scale(1.04);
+}
+td:active {
+  transform: scale(0.97);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+@keyframes cookiePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.cookie-btn.pop {
+  animation: cookiePop 0.15s ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.35);
+}
+
+  </style>
+</head>
+
+<body>
+  <audio id="ClickCookie" src="click.wav" preload="auto"></audio>
+    <audio id="ClickUpgrades" src="Upgrade.wav" preload="auto"></audio>
+  
+  <div id="loginBox">
+    <input id="pinInput" type="text" placeholder="Enter PIN">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="cookie-count">Cookies: <span id="count">0</span></div>
+    <div class="cps">Cookies/s: <span id="cpsCount">0</span></div>
+  </div>
+
+  <!-- COOKIE BUTTON -->
+  <button class="cookie-btn" onclick="Cookie()"></button>
+
+
+  <button class="open-upgrades">Upgrades ↑</button>
+
+
+  <div class="upgrades">
+    <div class="active-upgrades">
+      <h3>Actives</h3>
+      <table>
+        <tr><td onclick="AUpgrade(0)">50 - Sugar Spoon +2</td><td id="ANum1">0</td></tr>
+        <tr><td onclick="AUpgrade(1)">250 - Golden Spoon +5</td><td id="ANum2">0</td></tr>
+        <tr><td onclick="AUpgrade(2)">1000 - Diamond Spoon +10</td><td id="ANum3">0</td></tr>
+        <tr><td onclick="AUpgrade(3)">5000 - Magic Whisk +25</td><td id="ANum4">0</td></tr>
+        <tr><td onclick="AUpgrade(4)">20000 - Chocolate Hammer +100</td><td id="ANum5">0</td></tr>
+        <tr><td onclick="AUpgrade(5)">75000 - Elder Touch +300</td><td id="ANum6">0</td></tr>
+        <tr><td onclick="AUpgrade(6)">250000 - Celestial Click +1000</td><td id="ANum7">0</td></tr>
+      </table>
+    </div>
+    <div class="passive-upgrades">
+      <h3>Passives</h3>
+      <table>
+        <tr><td onclick="PUpgrade(0)">2500 - Grandma +1</td><td id="PNum1">0</td></tr>
+        <tr><td onclick="PUpgrade(1)">10000 - Oven +5</td><td id="PNum2">0</td></tr>
+        <tr><td onclick="PUpgrade(2)">50000 - Factory +20</td><td id="PNum3">0</td></tr>
+        <tr><td onclick="PUpgrade(3)">150000 - Lab +100</td><td id="PNum4">0</td></tr>
+        <tr><td onclick="PUpgrade(4)">400000 - Interdim Oven +250</td><td id="PNum5">0</td></tr>
+        <tr><td onclick="PUpgrade(5)">750000 - Universal Oven +500</td><td id="PNum6">0</td></tr>
+      </table>
+    </div>
+  </div>
+
+<script>
+let click = 1;
+let passive = 0;
+let pin = null;
+let scoreEl = document.getElementById("count");
+let cpsEl = document.getElementById("cpsCount");
+
+let AU = [
+  { id: "ANum1", cost: 50, bonus: 2, max: 10 },
+  { id: "ANum2", cost: 250, bonus: 5, max: 10 },
+  { id: "ANum3", cost: 1000, bonus: 10, max: 10 },
+  { id: "ANum4", cost: 5000, bonus: 25, max: 10 },
+  { id: "ANum5", cost: 20000, bonus: 100, max: 10 },
+  { id: "ANum6", cost: 75000, bonus: 300, max: 10 },
+  { id: "ANum7", cost: 250000, bonus: 1000, max: 10 }
+];
+
+let PU = [
+  { id: "PNum1", cost: 2500, bonus: 1, max: 10 },
+  { id: "PNum2", cost: 10000, bonus: 5, max: 10 },
+  { id: "PNum3", cost: 50000, bonus: 20, max: 10 },
+  { id: "PNum4", cost: 150000, bonus: 100, max: 10 },
+  { id: "PNum5", cost: 400000, bonus: 250, max: 10 },
+  { id: "PNum6", cost: 750000, bonus: 500, max: 10 }
+];
+
+function PlaySong1() {
+  const audio = document.getElementById("ClickCookie");
+  audio.currentTime = 0;
+  audio.play();
+}
+function PlaySong2() {
+  const audio = document.getElementById("ClickUpgrades");
+  audio.currentTime = 0;
+  audio.play();
+}
+// COOKIE CLICK
+function Cookie() {
+  scoreEl.innerText = Number(scoreEl.innerText) + click;
+
+  const btn = document.querySelector(".cookie-btn");
+  btn.classList.remove("pop");
+  void btn.offsetWidth;
+  btn.classList.add("pop");
+
+  PlaySong1();
+  saveGame();
+}
+
+
+// ACTIVE UPGRADE
+function AUpgrade(i) {
+  let up = AU[i];
+  let el = document.getElementById(up.id);
+  let amount = Number(el.innerText);
+  let score = Number(scoreEl.innerText);
+
+  if (amount >= up.max) return alert("Max level reached!");
+  if (score < up.cost) return;
+
+  scoreEl.innerText = score - up.cost;
+  el.innerText = amount + 1;
+  click += up.bonus;
+
+  saveGame();
+  PlaySong2();
+}
+
+function PUpgrade(i) {
+  let up = PU[i];
+  let el = document.getElementById(up.id);
+  let amount = Number(el.innerText);
+  let score = Number(scoreEl.innerText);
+
+  if (amount >= up.max) return alert("Max level reached!");
+  if (score < up.cost) return;
+
+  scoreEl.innerText = score - up.cost;
+  el.innerText = amount + 1;
+  passive += up.bonus;
+
+  saveGame();
+  PlaySong2();
+}
+
+setInterval(() => {
+  scoreEl.innerText = Number(scoreEl.innerText) + passive;
+  cpsEl.innerText = passive;
+  saveGame();
+}, 1000);
+
+// LOGIN SYSTEM
+function login() {
+  pin = document.getElementById("pinInput").value;
+  if (!pin) return alert("Enter a PIN");
+
+  let key = "cookie_save_" + pin;
+  let data = JSON.parse(localStorage.getItem(key));
+
+  if (data) {
+    loadData(data);
+    alert("Welcome back!");
+  } else {
+    resetGame();
+    alert("New account created!");
+  }
+
+  document.getElementById("loginBox").style.display = "none";
+}
+
+// RESET NEW ACCOUNT
+function resetGame() {
+  scoreEl.innerText = 0;
+  click = 1;
+  passive = 0;
+
+  AU.forEach(u => document.getElementById(u.id).innerText = 0);
+  PU.forEach(u => document.getElementById(u.id).innerText = 0);
+
+  saveGame();
+}
+
+// LOAD SAVE
+function loadData(d) {
+  scoreEl.innerText = d.score;
+  click = d.click;
+  passive = d.passive;
+  cpsEl.innerText = passive;
+
+  AU.forEach((u, i) =>
+    document.getElementById(u.id).innerText = d["AU" + (i + 1)]
+  );
+  PU.forEach((u, i) =>
+    document.getElementById(u.id).innerText = d["PU" + (i + 1)]
+  );
+}
+
+function saveGame() {
+  if (!pin) return;
+
+  let key = "cookie_save_" + pin;
+
+  let data = {
+    score: scoreEl.innerText,
+    click: click,
+    passive: passive
+  };
+
+  AU.forEach((u, i) => data["AU" + (i + 1)] = document.getElementById(u.id).innerText);
+  PU.forEach((u, i) => data["PU" + (i + 1)] = document.getElementById(u.id).innerText);
+
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+const upgradesPanel = document.querySelector('.upgrades');
+const upgradesBtn = document.querySelector('.open-upgrades');
+
+upgradesBtn.addEventListener('click', () => {
+    upgradesPanel.classList.toggle('active');
+});
+
+
+</script>
+
+</body>
+</html>
