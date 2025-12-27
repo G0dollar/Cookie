@@ -236,6 +236,7 @@ body {
 <!-- AUDIO -->
 <audio id="ClickCookie" src="click.wav" preload="auto"></audio>
 <audio id="ClickUpgrades" src="Upgrade.wav" preload="auto"></audio>
+<audio id="GetAchievement" src="Achievement.wav" preload="auto"></audio>
 
 <!-- LOGIN -->
 <div id="loginBox">
@@ -375,7 +376,11 @@ function playUpgrade() {
   a.currentTime = 0;
   a.play();
 }
-
+function playAchievement() {
+  const a = document.getElementById("GetAchievement");
+  a.currentTime = 0;
+  a.play();
+} 
 /* UI */
 function updateUI() {
   countEl.innerText = cookies;
