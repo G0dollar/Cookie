@@ -136,6 +136,70 @@ body {
 }
 
 .cost { font-weight: bold; }
+  .open-achievements {
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: 3px solid #7a4a24;
+  background:
+    linear-gradient(#f6e3c2, #e2c89c),
+    url("Images/wood-soft.jpg");
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.achievements {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  background:
+    linear-gradient(#ffffffcc, #e8e0d0cc),
+    url("Images/wood-light.jpg");
+  transform: translateY(100%);
+  transition: 0.3s;
+  border-radius: 20px 20px 0 0;
+  border-top: 6px solid #6b3e1e;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.achievements.active { transform: translateY(0); }
+
+.achievements h3 {
+  text-align: center;
+  margin-top: 0;
+}
+
+#achievementList li {
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 10px;
+  background: linear-gradient(#fff8e1, #edd2a5);
+  border: 2px solid #7a4a24;
+  opacity: 0.4;
+}
+
+#achievementList li.unlocked {
+  opacity: 1;
+  background: linear-gradient(#ffe9a8, #ffd36a);
+}
+
+/* TOAST POPUP */
+#achievementToast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(#ffe9a8, #ffd36a);
+  border: 3px solid #7a4a24;
+  border-radius: 14px;
+  padding: 10px 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  display: none;
+  z-index: 999;
+}
+  
 </style>
 </head>
 
@@ -167,7 +231,6 @@ body {
     <p id="aDesc"></p>
     <div class="cost" id="aCost"></div>
   </div>
-
   <div class="upgradeCircle passiveUp" onclick="buyPassive()">
     <h2 id="pName"></h2>
     <p id="pDesc"></p>
@@ -175,6 +238,14 @@ body {
   </div>
 </div>
 
+  <button class="open-achievements">Achievements 🏆</button>
+  <div class="achievements">
+  <h3>Achievements</h3>
+  <ul id="achievementList"></ul>
+</div>
+
+<div id="achievementToast"></div>
+  
 <script>
 /* ELEMENTS */
 const countEl = document.getElementById("count");
@@ -213,8 +284,47 @@ const passiveUpgrades = [
   { name: "Factory",   cost: 30000, desc: "+35 cookies per second",value: 35 },
   { name: "Cookie Lab",cost: 150000,desc: "+100 cookies per second",value: 100 }
 ];
+const achievements = [
+  { id: "first_click", name: "First Click", desc: "Click the cookie once", check: () => cookies >= 1 },
+  { id: "hundred_cookies", name: "Cookie Lover", desc: "Have 100 cookies", check: () => cookies >= 100 },
+  { id: "first_upgrade", name: "Getting Serious", desc: "Buy your first upgrade", check: () => activeIndex + passiveIndex >= 1 },
+  { id: "click_master", name: "Click Master", desc: "Reach 25 cookies per click", check: () => clickPower >= 25 },
+  { id: "cps_engine", name: "Automation!", desc: "Reach 20 cookies per second", check: () => cps >= 20 }
+];
 
+let unlockedAchievements = {};
+  
+function renderAchievements() {
+  const list = document.getElementById("achievementList");
+  list.innerHTML = "";
 
+  achievements.forEach(a => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${a.name}</strong><br>${a.desc}`;
+    if (unlockedAchievements[a.id]) li.classList.add("unlocked");
+    list.appendChild(li);
+  });
+}
+
+function checkAchievements() {
+  achievements.forEach(a => {
+    if (!unlockedAchievements[a.id] && a.check()) {
+      unlockedAchievements[a.id] = true;
+      showAchievementToast(a.name);
+      renderAchievements();
+      saveGame();
+    }
+  });
+}
+
+function showAchievementToast(text) {
+  const toast = document.getElementById("achievementToast");
+  toast.innerText = "🏆 Achievement Unlocked: " + text;
+  toast.style.display = "block";
+
+  setTimeout(() => toast.style.display = "none", 2500);
+}
+  
 /* AUDIO */
 function playClick() {
   const a = document.getElementById("ClickCookie");
@@ -262,6 +372,7 @@ function clickCookie() {
   playClick();
   saveGame();
   updateUI();
+  checkAchievements();
 }
 
 function buyActive() {
@@ -275,6 +386,7 @@ function buyActive() {
   playUpgrade();
   saveGame();
   updateUI();
+  checkAchievements();
 }
 
 function buyPassive() {
@@ -288,6 +400,7 @@ function buyPassive() {
   playUpgrade();
   saveGame();
   updateUI();
+  checkAchievements();
 }
 
 /* PASSIVE LOOP */
@@ -312,7 +425,7 @@ function login() {
 function saveGame() {
   if (!pin) return;
   localStorage.setItem("cookie_" + pin, JSON.stringify({
-    cookies, clickPower, cps, activeIndex, passiveIndex
+    cookies, clickPower, cps, activeIndex, passiveIndex, unlockedachievements
   }));
 }
 
@@ -322,12 +435,17 @@ function loadGame(d) {
   cps = d.cps;
   activeIndex = d.activeIndex;
   passiveIndex = d.passiveIndex;
+  unlockedAchievements = d.unlockedAchievements || {};
+renderAchievements();
+  
 }
 
 /* TOGGLE UPGRADES */
 document.querySelector(".open-upgrades").onclick = () =>
   document.querySelector(".upgrades").classList.toggle("active");
-
+document.querySelector(".open-achievements").onclick = () =>
+  document.querySelector(".achievements").classList.toggle("active");
+  
 updateUI();
 </script>
 
