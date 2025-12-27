@@ -199,18 +199,21 @@ let passiveIndex = 0;
 
 /* UPGRADES */
 const activeUpgrades = [
-  { name: "Sugar Spoon", cost: 50, desc: "+2 cookies per click", value: 2 },
-  { name: "Golden Spoon", cost: 250, desc: "+5 cookies per click", value: 5 },
-  { name: "Diamond Spoon", cost: 1000, desc: "+10 cookies per click", value: 10 },
-  { name: "Magic Whisk", cost: 5000, desc: "+25 cookies per click", value: 25 }
+  { name: "Sugar Spoon",   cost: 25,    desc: "+1 cookie per click",  value: 1 },
+  { name: "Golden Spoon",  cost: 120,   desc: "+3 cookies per click", value: 3 },
+  { name: "Diamond Spoon", cost: 600,   desc: "+8 cookies per click", value: 8 },
+  { name: "Magic Whisk",   cost: 3000,  desc: "+20 cookies per click",value: 20 },
+  { name: "Arcane Mixer",  cost: 15000, desc: "+50 cookies per click",value: 50 }
 ];
 
 const passiveUpgrades = [
-  { name: "Grandma", cost: 2500, desc: "+1 cookie per second", value: 1 },
-  { name: "Oven", cost: 10000, desc: "+5 cookies per second", value: 5 },
-  { name: "Factory", cost: 50000, desc: "+20 cookies per second", value: 20 },
-  { name: "Lab", cost: 150000, desc: "+100 cookies per second", value: 100 }
+  { name: "Grandma",   cost: 250,   desc: "+1 cookie per second",  value: 1 },
+  { name: "Oven",      cost: 1200,  desc: "+4 cookies per second", value: 4 },
+  { name: "Bakery",    cost: 6000,  desc: "+12 cookies per second",value: 12 },
+  { name: "Factory",   cost: 30000, desc: "+35 cookies per second",value: 35 },
+  { name: "Cookie Lab",cost: 150000,desc: "+100 cookies per second",value: 100 }
 ];
+
 
 /* AUDIO */
 function playClick() {
