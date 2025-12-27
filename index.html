@@ -199,6 +199,34 @@ body {
   display: none;
   z-index: 999;
 }
+
+  .close-panel {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+  border: 2px solid #7a4a24;
+
+  background:
+    linear-gradient(#f6e3c2, #e2c89c),
+    url("Images/wood-soft.jpg");
+
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.35),
+    inset 0 1px 2px rgba(255,255,255,0.5);
+}
+
+.close-panel:active {
+  transform: scale(0.9);
+}
   
 </style>
 </head>
@@ -226,6 +254,7 @@ body {
 
 <!-- UPGRADES -->
 <div class="upgrades">
+    <button class="close-panel" onclick="closeUpgrades()">✕</button>
   <div class="upgradeCircle activeUp" onclick="buyActive()">
     <h2 id="aName"></h2>
     <p id="aDesc"></p>
@@ -240,6 +269,7 @@ body {
 
   <button class="open-achievements">Achievements 🏆</button>
   <div class="achievements">
+      <button class="close-panel" onclick="closeAchievements()">✕</button>
   <h3>Achievements</h3>
   <ul id="achievementList"></ul>
 </div>
@@ -323,6 +353,14 @@ function showAchievementToast(text) {
   toast.style.display = "block";
 
   setTimeout(() => toast.style.display = "none", 2500);
+}
+
+  function closeUpgrades() {
+  document.querySelector(".upgrades").classList.remove("active");
+}
+
+function closeAchievements() {
+  document.querySelector(".achievements").classList.remove("active");
 }
   
 /* AUDIO */
@@ -441,11 +479,16 @@ renderAchievements();
 }
 
 /* TOGGLE UPGRADES */
-document.querySelector(".open-upgrades").onclick = () =>
+document.querySelector(".open-upgrades").onclick = () => {
+  document.querySelector(".achievements").classList.remove("active");
   document.querySelector(".upgrades").classList.toggle("active");
-document.querySelector(".open-achievements").onclick = () =>
+};
+
+document.querySelector(".open-achievements").onclick = () => {
+  document.querySelector(".upgrades").classList.remove("active");
   document.querySelector(".achievements").classList.toggle("active");
-  
+};
+
 updateUI();
 </script>
 
