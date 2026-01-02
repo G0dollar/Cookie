@@ -268,7 +268,7 @@ function clickCookie(){
 
 function buyActive(){
  let u=active[aI];
-  if (aI <= 4) {
+  if (aI <= 3) {
   if(!u||cookies<u[1])return;
  cookies-=u[1]; clickPower+=u[3]; aI++;
  playUpgrade(); save(); updateUI(); checkAchievements();
@@ -281,7 +281,7 @@ function buyActive(){
 }
 function buyPassive(){
  let u=passive[pI];
-  if (pI <= 4) {
+  if (pI <= 3) {
   if(!u||cookies<u[1])return;
  cookies-=u[1]; cps+=u[3]; pI++;
  playUpgrade(); save(); updateUI(); checkAchievements();
