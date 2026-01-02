@@ -224,7 +224,24 @@ const achievements=[
 ];
 
 const $=i=>document.getElementById(i);
+function playClick() {
+  const a = document.getElementById("sClick");
+  a.currentTime = 0;
+  a.play();
+}
 
+function playUpgrade() {
+  const a = document.getElementById("sBuy");
+  a.currentTime = 0;
+  a.play();
+  }
+
+  function playAchievement() {
+  const a = document.getElementById("sAch");
+  a.currentTime = 0;
+  a.play();
+  }
+  
 /* UI */
 function updateUI(){
  $("count").textContent=Math.floor(cookies);
@@ -245,20 +262,19 @@ function updateUI(){
 /* GAME */
 function clickCookie(){
  cookies+=clickPower;
- $("sClick").play();
+ playClick();
  save(); updateUI(); checkAchievements();
 }
 
 function buyActive(){
  let u=active[aI]; if(!u||cookies<u[1])return;
  cookies-=u[1]; clickPower+=u[3]; aI++;
- $("sBuy").play(); save(); updateUI(); checkAchievements();
+ playUpgrade(); save(); updateUI(); checkAchievements();
 }
-
 function buyPassive(){
  let u=passive[pI]; if(!u||cookies<u[1])return;
  cookies-=u[1]; cps+=u[3]; pI++;
- $("sBuy").play(); save(); updateUI(); checkAchievements();
+ playUpgrade(); save(); updateUI(); checkAchievements();
 }
 
 /* ACHIEVEMENTS */
@@ -277,7 +293,7 @@ function checkAchievements(){
   if(!unlocked[a.id]&&a.c()){
    unlocked[a.id]=1;
    toast("🏆 "+a.n);
-   $("sAch").play();
+   playAchivement();
    save();
   }
  });
