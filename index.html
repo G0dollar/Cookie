@@ -267,14 +267,30 @@ function clickCookie(){
 }
 
 function buyActive(){
- let u=active[aI]; if(!u||cookies<u[1])return;
+ let u=active[aI];
+  if (aI <= 4) {
+  if(!u||cookies<u[1])return;
  cookies-=u[1]; clickPower+=u[3]; aI++;
  playUpgrade(); save(); updateUI(); checkAchievements();
+  }
+  else {
+    aName.innerText = "Max";
+    aDesc.innerText = "";
+    aCost.innerText = "";
+  }
 }
 function buyPassive(){
- let u=passive[pI]; if(!u||cookies<u[1])return;
+ let u=passive[pI];
+  if (pI <= 4) {
+  if(!u||cookies<u[1])return;
  cookies-=u[1]; cps+=u[3]; pI++;
  playUpgrade(); save(); updateUI(); checkAchievements();
+  }
+  else {
+    pName.innerText = "Max";
+    pDesc.innerText = "";
+    pCost.innerText = "";
+  }
 }
 
 /* ACHIEVEMENTS */
