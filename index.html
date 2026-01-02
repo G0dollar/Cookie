@@ -193,7 +193,7 @@ button:active { transform: scale(.92); }
 
 <script>
 /* STATE */
-let cookies=10000, cps=0, clickPower=1, pin=null;
+let cookies=0, cps=0, clickPower=1, pin=null;
 let aI=0, pI=0;
 let unlocked={};
 
@@ -274,8 +274,8 @@ function buyActive(){
  playUpgrade(); save(); updateUI(); checkAchievements();
   }
   else {
-    aName.innerText = "Max";
-    aDesc.innerText = "";
+    aName.innerText = "";
+    aDesc.innerText = "MAX";
     aCost.innerText = "";
   }
 }
@@ -287,8 +287,8 @@ function buyPassive(){
  playUpgrade(); save(); updateUI(); checkAchievements();
   }
   else {
-    pName.innerText = "Max";
-    pDesc.innerText = "";
+    pName.innerText = "";
+    pDesc.innerText = "MAX";
     pCost.innerText = "";
   }
 }
