@@ -293,7 +293,7 @@ function checkAchievements(){
   if(!unlocked[a.id]&&a.c()){
    unlocked[a.id]=1;
    toast("🏆 "+a.n);
-   playAchivement();
+   playAchievement();
    save();
   }
  });
