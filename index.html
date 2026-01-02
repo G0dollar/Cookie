@@ -6,8 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* { -webkit-tap-highlight-color: transparent; }
-button:focus { outline: none; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
   margin: 0;
@@ -15,19 +14,28 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background:
-    linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
-    url("wood.jpg");
+  background: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)), url("wood.jpg");
   background-size: cover;
 }
 
+/* BUTTONS */
+button {
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: 3px solid #7a4a24;
+  background: linear-gradient(#f6e3c2, #e2c89c);
+  cursor: pointer;
+  transition: transform .1s;
+}
+button:active { transform: scale(.92); }
+
 /* LOGIN */
 #loginBox {
-  background: linear-gradient(#fff8e1, #edd2a5);
-  padding: 16px 20px;
-  border-radius: 14px;
-  border: 3px solid #8b5a2b;
   margin-top: 20px;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(#fff8e1, #edd2a5);
+  border: 3px solid #8b5a2b;
 }
 
 /* STATS */
@@ -36,10 +44,10 @@ body {
   max-width: 600px;
   display: flex;
   justify-content: space-between;
-  padding: 12px 18px;
+  padding: 12px;
   margin: 12px;
-  background: linear-gradient(#f6e3c2, #e2c89c);
   border-radius: 14px;
+  background: linear-gradient(#f6e3c2, #e2c89c);
   border: 2px solid #7a4a24;
 }
 
@@ -50,23 +58,16 @@ body {
   border-radius: 50%;
   border: none;
   margin: 20px;
-  cursor: pointer;
-  background:
-    radial-gradient(circle at top left, #ffffff44, #00000044),
-    url("Cookies.jpg");
+  background: radial-gradient(circle at top left,#fff5,#0005), url("Cookies.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-}
-
-.cookie-btn:active { transform: scale(0.95); }
-
-button {
-  padding: 10px 24px;
-  border-radius: 12px;
-  border: 3px solid #7a4a24;
-  background: linear-gradient(#f6e3c2, #e2c89c);
   cursor: pointer;
+}
+.cookie-btn:active { animation: bounce .2s; }
+
+@keyframes bounce {
+  50% { transform: scale(.9); }
 }
 
 /* PANELS */
@@ -75,14 +76,13 @@ button {
   bottom: 0;
   width: 100%;
   max-width: 600px;
-  background: linear-gradient(#ffffffcc, #e8e0d0cc);
-  transform: translateY(100%);
-  transition: 0.3s;
+  background: linear-gradient(#fff,#e8e0d0);
+  transform: translateY(110%);
+  transition: .35s;
   border-radius: 20px 20px 0 0;
   border-top: 6px solid #6b3e1e;
-  padding: 12px;
+  padding: 14px;
 }
-
 .panel.active { transform: translateY(0); }
 
 .close-panel {
@@ -100,101 +100,92 @@ button {
   display: flex;
   justify-content: space-around;
 }
-
-.upgradeCircle {
-  width: 180px;
-  height: 180px;
+.upgrade {
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   text-align: center;
+  padding: 12px;
   cursor: pointer;
-  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 16px rgba(0,0,0,.4);
+  transition: transform .15s;
 }
-
-.activeUp {
-  background: radial-gradient(circle, #fff6d5, #e3b872);
-}
-
-.passiveUp {
-  background: radial-gradient(circle, #d5f0ff, #72b7e3);
-}
+.upgrade:hover { transform: scale(1.05); }
+.activeUp { background: radial-gradient(circle,#fff6d5,#e3b872); }
+.passiveUp { background: radial-gradient(circle,#d5f0ff,#72b7e3); }
 
 /* ACHIEVEMENTS */
 #achievementList li {
-  padding: 8px;
+  list-style: none;
   margin: 6px 0;
+  padding: 10px;
   border-radius: 10px;
-  background: linear-gradient(#fff8e1, #edd2a5);
-  opacity: 0.4;
+  background: linear-gradient(#fff8e1,#edd2a5);
+  border: 2px solid #7a4a24;
+  opacity: .35;
 }
-
 #achievementList li.unlocked {
   opacity: 1;
-  background: linear-gradient(#ffe9a8, #ffd36a);
+  background: linear-gradient(#ffe9a8,#ffd36a);
 }
 
 /* TOAST */
 #toast {
   position: fixed;
-  top: 20px;
+  top: -80px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(#ffe9a8, #ffd36a);
+  padding: 12px 20px;
+  background: linear-gradient(#ffe9a8,#ffd36a);
   border: 3px solid #7a4a24;
   border-radius: 14px;
-  padding: 10px 18px;
-  display: none;
+  font-weight: bold;
+  transition: .5s;
   z-index: 99;
 }
+#toast.show { top: 20px; }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO -->
 <audio id="sClick" src="click.wav"></audio>
 <audio id="sBuy" src="Upgrade.wav"></audio>
 <audio id="sAch" src="Achievement.wav"></audio>
 
-<!-- LOGIN -->
 <div id="loginBox">
   <input id="pinInput" placeholder="Enter PIN">
   <button onclick="login()">Login</button>
 </div>
 
-<!-- STATS -->
 <div class="stats">
   <div>Cookies: <span id="count">0</span></div>
   <div>CPS: <span id="cps">0</span></div>
 </div>
 
 <button class="cookie-btn" onclick="clickCookie()"></button>
-<button onclick="toggle('upgrades')">Upgrades ↑</button>
-<button onclick="toggle('achievements')">Achievements 🏆</button>
+<button onclick="openPanel('upgrades')">Upgrades ↑</button>
+<button onclick="openPanel('achievements')">Achievements 🏆</button>
 
 <!-- UPGRADES -->
 <div id="upgrades" class="panel">
-<button class="close-panel" onclick="toggle('upgrades')">✕</button>
+<button class="close-panel" onclick="closePanels()">✕</button>
 <div class="upgradeWrap">
-  <div class="upgradeCircle activeUp" onclick="buyActive()">
-    <h3 id="aName"></h3>
-    <p id="aDesc"></p>
-    <b id="aCost"></b>
+  <div class="upgrade activeUp" onclick="buyActive()">
+    <h3 id="aName"></h3><p id="aDesc"></p><b id="aCost"></b>
   </div>
-  <div class="upgradeCircle passiveUp" onclick="buyPassive()">
-    <h3 id="pName"></h3>
-    <p id="pDesc"></p>
-    <b id="pCost"></b>
+  <div class="upgrade passiveUp" onclick="buyPassive()">
+    <h3 id="pName"></h3><p id="pDesc"></p><b id="pCost"></b>
   </div>
 </div>
 </div>
 
 <!-- ACHIEVEMENTS -->
 <div id="achievements" class="panel">
-<button class="close-panel" onclick="toggle('achievements')">✕</button>
+<button class="close-panel" onclick="closePanels()">✕</button>
 <ul id="achievementList"></ul>
 </div>
 
@@ -202,11 +193,10 @@ button {
 
 <script>
 /* STATE */
-let cookies=0, clickPower=1, cps=0, pin=null;
-let aIndex=0, pIndex=0;
+let cookies=0, cps=0, clickPower=1, pin=null;
+let aI=0, pI=0;
 let unlocked={};
 
-/* DATA */
 const active=[
  ["Sugar Spoon",25,"+1 CPC",1],
  ["Golden Spoon",120,"+3 CPC",3],
@@ -222,26 +212,32 @@ const passive=[
 ];
 
 const achievements=[
- {id:"c1",n:"First Click",c:()=>cookies>=1},
- {id:"c100",n:"100 Cookies",c:()=>cookies>=100},
- {id:"up1",n:"First Upgrade",c:()=>aIndex+pIndex>=1},
- {id:"cps20",n:"Automation",c:()=>cps>=20}
+ {id:"c1",n:"First Click",d:"Click the cookie once",c:()=>cookies>=1},
+ {id:"c10",n:"Getting Warm",d:"Have 10 cookies",c:()=>cookies>=10},
+ {id:"c100",n:"Cookie Lover",d:"Have 100 cookies",c:()=>cookies>=100},
+ {id:"c1000",n:"Cookie Hoarder",d:"Have 1,000 cookies",c:()=>cookies>=1000},
+ {id:"up1",n:"First Upgrade",d:"Buy any upgrade",c:()=>aI+pI>=1},
+ {id:"up5",n:"Investor",d:"Buy 5 upgrades",c:()=>aI+pI>=5},
+ {id:"cpc25",n:"Click Master",d:"Reach 25 CPC",c:()=>clickPower>=25},
+ {id:"cps10",n:"Automation I",d:"Reach 10 CPS",c:()=>cps>=10},
+ {id:"cps50",n:"Automation II",d:"Reach 50 CPS",c:()=>cps>=50}
 ];
 
+const $=i=>document.getElementById(i);
+
 /* UI */
-const $=id=>document.getElementById(id);
 function updateUI(){
  $("count").textContent=Math.floor(cookies);
  $("cps").textContent=cps;
- if(active[aIndex]){
-  $("aName").textContent=active[aIndex][0];
-  $("aDesc").textContent=active[aIndex][2];
-  $("aCost").textContent="Cost: "+active[aIndex][1];
+ if(active[aI]){
+  $("aName").textContent=active[aI][0];
+  $("aDesc").textContent=active[aI][2];
+  $("aCost").textContent="Cost: "+active[aI][1];
  }
- if(passive[pIndex]){
-  $("pName").textContent=passive[pIndex][0];
-  $("pDesc").textContent=passive[pIndex][2];
-  $("pCost").textContent="Cost: "+passive[pIndex][1];
+ if(passive[pI]){
+  $("pName").textContent=passive[pI][0];
+  $("pDesc").textContent=passive[pI][2];
+  $("pCost").textContent="Cost: "+passive[pI][1];
  }
  renderAchievements();
 }
@@ -254,14 +250,14 @@ function clickCookie(){
 }
 
 function buyActive(){
- let u=active[aIndex]; if(!u||cookies<u[1])return;
- cookies-=u[1]; clickPower+=u[3]; aIndex++;
+ let u=active[aI]; if(!u||cookies<u[1])return;
+ cookies-=u[1]; clickPower+=u[3]; aI++;
  $("sBuy").play(); save(); updateUI(); checkAchievements();
 }
 
 function buyPassive(){
- let u=passive[pIndex]; if(!u||cookies<u[1])return;
- cookies-=u[1]; cps+=u[3]; pIndex++;
+ let u=passive[pI]; if(!u||cookies<u[1])return;
+ cookies-=u[1]; cps+=u[3]; pI++;
  $("sBuy").play(); save(); updateUI(); checkAchievements();
 }
 
@@ -270,7 +266,7 @@ function renderAchievements(){
  let ul=$("achievementList"); ul.innerHTML="";
  achievements.forEach(a=>{
   let li=document.createElement("li");
-  li.textContent=a.n;
+  li.innerHTML="<b>"+a.n+"</b><br>"+a.d;
   if(unlocked[a.id]) li.classList.add("unlocked");
   ul.appendChild(li);
  });
@@ -290,36 +286,39 @@ function checkAchievements(){
 function toast(t){
  let d=$("toast");
  d.textContent=t;
- d.style.display="block";
- setTimeout(()=>d.style.display="none",2500);
+ d.classList.add("show");
+ setTimeout(()=>d.classList.remove("show"),2500);
+}
+
+/* PANELS */
+function openPanel(id){
+ closePanels();
+ $(id).classList.add("active");
+}
+function closePanels(){
+ $("upgrades").classList.remove("active");
+ $("achievements").classList.remove("active");
 }
 
 /* SAVE */
 function save(){
- if(!pin) return;
+ if(!pin)return;
  localStorage.setItem("cookie_"+pin,JSON.stringify({
-  cookies,clickPower,cps,aIndex,pIndex,unlocked
+  cookies,cps,clickPower,aI,pI,unlocked
  }));
 }
 
 function login(){
  pin=$("pinInput").value.trim();
- if(!pin) return alert("Enter PIN");
+ if(!pin)return alert("Enter PIN");
  let d=JSON.parse(localStorage.getItem("cookie_"+pin));
- if(d){Object.assign(window,d);}
+ if(d)Object.assign(window,d);
  $("loginBox").style.display="none";
  updateUI(); checkAchievements();
 }
 
-/* PANELS */
-function toggle(id){
- $("upgrades").classList.remove("active");
- $("achievements").classList.remove("active");
- if(id) $(id).classList.toggle("active");
-}
-
 /* PASSIVE */
-setInterval(()=>{cookies+=cps; updateUI(); save();},1000);
+setInterval(()=>{cookies+=cps; save(); updateUI();},1000);
 updateUI();
 </script>
 </body>
