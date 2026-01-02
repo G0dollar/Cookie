@@ -459,32 +459,218 @@ function login() {
   if (!pin) return alert("Enter PIN");
 
   const data = JSON.parse(localStorage.getItem("cookie_" + pin));
+<script>
+/* ELEMENTS */
+const countEl = document.getElementById("count");
+const cpsEl   = document.getElementById("cps");
+
+const aName = document.getElementById("aName");
+const aDesc = document.getElementById("aDesc");
+const aCost = document.getElementById("aCost");
+
+const pName = document.getElementById("pName");
+const pDesc = document.getElementById("pDesc");
+const pCost = document.getElementById("pCost");
+
+const pinInput = document.getElementById("pinInput");
+const loginBox = document.getElementById("loginBox");
+
+/* GAME STATE */
+let cookies = 0;
+let clickPower = 1;
+let cps = 0;
+let pin = null;
+
+let activeIndex = 0;
+let passiveIndex = 0;
+
+/* UPGRADES */
+const activeUpgrades = [
+  { name: "Sugar Spoon", cost: 25, desc: "+1 cookie per click", value: 1 },
+  { name: "Golden Spoon", cost: 120, desc: "+3 cookies per click", value: 3 },
+  { name: "Diamond Spoon", cost: 600, desc: "+8 cookies per click", value: 8 },
+  { name: "Magic Whisk", cost: 3000, desc: "+20 cookies per click", value: 20 },
+  { name: "Arcane Mixer", cost: 15000, desc: "+50 cookies per click", value: 50 }
+];
+
+const passiveUpgrades = [
+  { name: "Grandma", cost: 250, desc: "+1 cookie per second", value: 1 },
+  { name: "Oven", cost: 1200, desc: "+4 cookies per second", value: 4 },
+  { name: "Bakery", cost: 6000, desc: "+12 cookies per second", value: 12 },
+  { name: "Factory", cost: 30000, desc: "+35 cookies per second", value: 35 },
+  { name: "Cookie Lab", cost: 150000, desc: "+100 cookies per second", value: 100 }
+];
+
+/* ACHIEVEMENTS */
+const achievements = [
+  { id: "first_click", name: "First Click", desc: "Click the cookie once", check: () => cookies >= 1 },
+  { id: "hundred_cookies", name: "Cookie Lover", desc: "Have 100 cookies", check: () => cookies >= 100 },
+  { id: "first_upgrade", name: "Getting Serious", desc: "Buy your first upgrade", check: () => activeIndex + passiveIndex >= 1 },
+  { id: "click_master", name: "Click Master", desc: "Reach 25 cookies per click", check: () => clickPower >= 25 },
+  { id: "cps_engine", name: "Automation!", desc: "Reach 20 cookies per second", check: () => cps >= 20 }
+];
+
+let unlockedAchievements = {};
+
+/* ACHIEVEMENTS UI */
+function renderAchievements() {
+  const list = document.getElementById("achievementList");
+  list.innerHTML = "";
+
+  achievements.forEach(a => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${a.name}</strong><br>${a.desc}`;
+    if (unlockedAchievements[a.id]) li.classList.add("unlocked");
+    list.appendChild(li);
+  });
+}
+
+function checkAchievements() {
+  achievements.forEach(a => {
+    if (!unlockedAchievements[a.id] && a.check()) {
+      unlockedAchievements[a.id] = true;
+      showAchievementToast(a.name);
+      renderAchievements();
+      saveGame();
+    }
+  });
+}
+
+function showAchievementToast(text) {
+  const toast = document.getElementById("achievementToast");
+  toast.innerText = "🏆 Achievement Unlocked: " + text;
+  toast.style.display = "block";
+  playAchievement();
+  setTimeout(() => toast.style.display = "none", 2500);
+}
+
+/* AUDIO */
+function playClick() {
+  const a = document.getElementById("ClickCookie");
+  a.currentTime = 0;
+  a.play();
+}
+
+function playUpgrade() {
+  const a = document.getElementById("ClickUpgrades");
+  a.currentTime = 0;
+  a.play();
+}
+
+function playAchievement() {
+  const a = document.getElementById("GetAchievement");
+  a.currentTime = 0;
+  a.play();
+}
+
+/* UI UPDATE */
+function updateUI() {
+  countEl.innerText = Math.floor(cookies);
+  cpsEl.innerText = cps;
+
+  if (activeIndex < activeUpgrades.length) {
+    const a = activeUpgrades[activeIndex];
+    aName.innerText = a.name;
+    aDesc.innerText = a.desc;
+    aCost.innerText = "Cost: " + a.cost;
+  } else {
+    aName.innerText = "Completed";
+    aDesc.innerText = "All active upgrades bought";
+    aCost.innerText = "";
+  }
+
+  if (passiveIndex < passiveUpgrades.length) {
+    const p = passiveUpgrades[passiveIndex];
+    pName.innerText = p.name;
+    pDesc.innerText = p.desc;
+    pCost.innerText = "Cost: " + p.cost;
+  } else {
+    pName.innerText = "Completed";
+    pDesc.innerText = "All passive upgrades bought";
+    pCost.innerText = "";
+  }
+}
+
+/* GAME ACTIONS */
+function clickCookie() {
+  cookies += clickPower;
+  playClick();
+  updateUI();
+  checkAchievements();
+  saveGame();
+}
+
+function buyActive() {
+  const u = activeUpgrades[activeIndex];
+  if (!u || cookies < u.cost) return;
+
+  cookies -= u.cost;
+  clickPower += u.value;
+  activeIndex++;
+  playUpgrade();
+  updateUI();
+  checkAchievements();
+  saveGame();
+}
+
+function buyPassive() {
+  const u = passiveUpgrades[passiveIndex];
+  if (!u || cookies < u.cost) return;
+
+  cookies -= u.cost;
+  cps += u.value;
+  passiveIndex++;
+  playUpgrade();
+  updateUI();
+  checkAchievements();
+  saveGame();
+}
+
+/* PASSIVE LOOP */
+setInterval(() => {
+  cookies += cps;
+  updateUI();
+  saveGame();
+}, 1000);
+
+/* LOGIN + SAVE */
+function login() {
+  pin = pinInput.value.trim();
+  if (!pin) return alert("Enter a valid PIN");
+
+  const data = JSON.parse(localStorage.getItem("cookie_" + pin));
   if (data) loadGame(data);
   else saveGame();
 
   loginBox.style.display = "none";
   updateUI();
+  renderAchievements();
+  checkAchievements();
 }
 
 function saveGame() {
   if (!pin) return;
   localStorage.setItem("cookie_" + pin, JSON.stringify({
-    cookies, clickPower, cps, activeIndex, passiveIndex, unlockedachievements
+    cookies,
+    clickPower,
+    cps,
+    activeIndex,
+    passiveIndex,
+    unlockedAchievements
   }));
 }
 
 function loadGame(d) {
-  cookies = d.cookies;
-  clickPower = d.clickPower;
-  cps = d.cps;
-  activeIndex = d.activeIndex;
-  passiveIndex = d.passiveIndex;
+  cookies = d.cookies || 0;
+  clickPower = d.clickPower || 1;
+  cps = d.cps || 0;
+  activeIndex = d.activeIndex || 0;
+  passiveIndex = d.passiveIndex || 0;
   unlockedAchievements = d.unlockedAchievements || {};
-renderAchievements();
-  
+  renderAchievements();
 }
 
-/* TOGGLE UPGRADES */
+/* PANELS */
 document.querySelector(".open-upgrades").onclick = () => {
   document.querySelector(".achievements").classList.remove("active");
   document.querySelector(".upgrades").classList.toggle("active");
@@ -495,6 +681,16 @@ document.querySelector(".open-achievements").onclick = () => {
   document.querySelector(".achievements").classList.toggle("active");
 };
 
+function closeUpgrades() {
+  document.querySelector(".upgrades").classList.remove("active");
+}
+
+function closeAchievements() {
+  document.querySelector(".achievements").classList.remove("active");
+}
+
+/* INIT */
+renderAchievements();
 updateUI();
 </script>
 
