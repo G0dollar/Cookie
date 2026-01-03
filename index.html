@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="manifest.json">
-<title>COOKIE</title>
+<title>COOKIE V+2.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -80,26 +80,37 @@ button:active { transform: scale(.96); }
   bottom: 0;
   width: 100%;
   max-width: 900px;
+  /* Added max-height and scrolling for the panel itself */
+  max-height: 85vh; 
+  overflow-y: auto;
   background: linear-gradient(#fff,#e8e0d0);
-  transform: translateY(110%);
   transition: .35s;
   border-radius: 20px 20px 0 0;
   border-top: 6px solid #6b3e1e;
-  padding: 14px;
+  padding: 20px; /* Increased padding for better spacing */
   left: 50%;
-  transform-origin: center;
-  transform: translate(-50%,110%);
+  transform: translate(-50%, 110%);
+  z-index: 100;
 }
-.panel.active { transform: translate(-50%,0); }
+
+.panel.active { 
+  transform: translate(-50%, 0); 
+}
 
 .close-panel {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
+  position: sticky; /* Keeps the button visible while scrolling */
+  top: 0;
+  float: right;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   font-weight: bold;
+  /* Centering the X perfectly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
+  margin-bottom: 10px;
 }
 
 /* NEW: Upgrade tables */
@@ -156,7 +167,13 @@ button:active { transform: scale(.96); }
   opacity: 1;
   background: linear-gradient(#ffe9a8,#ffd36a);
 }
-
+  #achievementList {
+  padding: 0;
+  margin-top: 40px; /* Space for the close button */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  }
 /* TOAST */
 #toast {
   position: fixed;
