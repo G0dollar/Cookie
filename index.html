@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="manifest.json">
-<title>COOKIE V-2.2</title>
+<title>COOKIE V-2.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -498,43 +498,47 @@ function save(){
  }
 }
 
-/* LOGIN - Fixed to recalculate stats on load */
+/* Updated Login to ensure global balance changes apply */
 function login(){
  pin = $("pinInput").value.trim();
  if(!pin) return alert("Enter PIN");
+ 
  try {
-  let d = JSON.parse(localStorage.getItem("cookie_"+pin));
-  if(d){
-   // Restore basic stats
-   cookies = d.cookies || 0;
-   aI = d.aI || 0;
-   pI = d.pI || 0;
-   unlocked = d.unlocked || {};
-   totalClicks = d.totalClicks || 0;
-   totalPurchases = d.totalPurchases || 0;
-   playSeconds = d.playSeconds || 0;
+  let savedData = JSON.parse(localStorage.getItem("cookie_"+pin));
+  if(savedData){
+   // 1. Restore the "State" (what they have achieved/bought)
+   cookies = savedData.cookies || 0;
+   aI = savedData.aI || 0;
+   pI = savedData.pI || 0;
+   unlocked = savedData.unlocked || {};
+   totalClicks = savedData.totalClicks || 0;
+   totalPurchases = savedData.totalPurchases || 0;
+   playSeconds = savedData.playSeconds || 0;
 
-   // RECALCULATE Click Power (CPC) based on owned upgrades
-   let baseClick = 1;
+   // 2. RECALCULATE CPC (Click Power) 
+   // We start at 1, then add the bonus of every owned upgrade
+   let newCPC = 1;
    for(let i = 0; i < aI; i++) {
-     baseClick += active[i][3];
+     newCPC += active[i][3]; // Takes the CURRENT value from your 'active' array
    }
-   clickPower = baseClick;
+   clickPower = newCPC;
 
-   // RECALCULATE CPS based on owned upgrades
-   let baseCPS = 0;
+   // 3. RECALCULATE CPS (Passive Income)
+   let newCPS = 0;
    for(let i = 0; i < pI; i++) {
-     baseCPS += passive[i][3];
+     newCPS += passive[i][3]; // Takes the CURRENT value from your 'passive' array
    }
-   cps = baseCPS;
+   cps = newCPS;
   }
  } catch (e) {
   console.error("Load failed", e);
  }
+ 
  $("loginBox").style.display = "none";
  updateUI(); 
  checkAchievements();
 }
+
 
 /* PASSIVE */
 setInterval(()=>{
