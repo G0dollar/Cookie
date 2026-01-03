@@ -11,69 +11,82 @@
 
 body {
   margin: 0;
-  font-family: "Trebuchet MS", sans-serif;
+  font-family: "Segoe UI", Tahoma, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url("wood.jpg");
+  background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)), url("wood.jpg");
   background-size: cover;
+  background-attachment: fixed;
   color: #4b2e18;
   min-height: 100vh;
 }
 
+/* CLEANER STATS BAR */
+.stats {
+  width: 95%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(5px);
+  border: 2px solid #7a4a24;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+.stat-item { display: flex; flex-direction: column; }
+.stat-label { font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: #8b5a2b; }
+.stat-value { font-size: 1.2rem; font-weight: bold; }
+.gem-count { color: #008cff; }
+
 /* BUTTONS */
 button {
-  padding: 8px 12px;
-  border-radius: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
   border: 2px solid #7a4a24;
   background: linear-gradient(#f6e3c2, #e2c89c);
+  font-weight: bold;
   cursor: pointer;
-  transition: transform .1s;
+  transition: transform .1s, filter 0.2s;
 }
-button:active { transform: scale(.96); }
+button:active { transform: scale(.95); }
+button:hover { filter: brightness(1.05); }
 
-/* LOGIN */
+/* COLLAPSIBLE TOGGLE */
+.toggle-btn {
+  float: right;
+  padding: 2px 8px;
+  font-size: 1.2rem;
+  background: none;
+  border: none;
+  color: #7a4a24;
+}
+
+/* LOGIN BOX */
 #loginBox {
-  margin-top: 20px;
-  padding: 14px;
-  border-radius: 14px;
-  background: linear-gradient(#fff8e1, #edd2a5);
-  border: 3px solid #8b5a2b;
-  z-index: 1000;
+  margin-top: 50px;
+  padding: 25px;
+  border-radius: 20px;
+  background: #fff8e1;
+  border: 4px solid #8b5a2b;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  text-align: center;
 }
 
-/* STATS */
-.stats {
-  width: 90%;
-  max-width: 900px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px;
-  margin: 12px;
-  border-radius: 14px;
-  background: linear-gradient(#f6e3c2, #e2c89c);
-  border: 2px solid #7a4a24;
-}
-
-/* COOKIE */
 .cookie-btn {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   border: none;
-  margin: 20px;
-  background: radial-gradient(circle at top left,rgba(255,255,255,0.3),rgba(0,0,0,0.3)), url("Cookies.jpg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  margin: 30px;
+  background: radial-gradient(circle at 30% 30%,rgba(255,255,255,0.4),rgba(0,0,0,0.4)), url("Cookies.jpg");
+  background-size: cover;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
   cursor: pointer;
-}
-.cookie-btn:active { animation: bounce .2s; }
-
-@keyframes bounce {
-  50% { transform: scale(.9); }
 }
 
 /* PANELS */
@@ -84,90 +97,42 @@ button:active { transform: scale(.96); }
   max-width: 900px;
   max-height: 85vh; 
   overflow-y: auto;
-  background: linear-gradient(#fff,#e8e0d0);
-  transition: .35s;
-  border-radius: 20px 20px 0 0;
-  border-top: 6px solid #6b3e1e;
+  background: #fdfaf4;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 25px 25px 0 0;
+  border-top: 8px solid #6b3e1e;
   padding: 20px;
   left: 50%;
   transform: translate(-50%, 110%);
   z-index: 100;
 }
-
-.panel.active { 
-  transform: translate(-50%, 0); 
-}
-
-.close-panel {
-  position: sticky;
-  top: 0;
-  float: right;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 101;
-  margin-bottom: 10px;
-}
-
-.upgrade-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-@media (max-width: 720px) {
-  .upgrade-section { grid-template-columns: 1fr; }
-}
+.panel.active { transform: translate(-50%, 0); }
 
 .upgrade-card {
-  background: linear-gradient(#fff8e1,#edd2a5);
-  border: 2px solid #7a4a24;
-  border-radius: 10px;
-  padding: 10px;
+  background: #fff;
+  border: 2px solid #e2c89c;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
 }
-.upgradeTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-}
-.upgradeTable th, .upgradeTable td {
-  border-bottom: 1px solid rgba(122,74,36,.15);
-  padding: 8px 6px;
-  text-align: left;
-  font-size: 0.95em;
-}
-
-#achievementList li {
-  list-style: none;
-  margin: 6px 0;
-  padding: 10px;
-  border-radius: 10px;
-  background: linear-gradient(#fff8e1,#edd2a5);
-  border: 2px solid #7a4a24;
-  opacity: .35;
-}
-#achievementList li.unlocked {
-  opacity: 1;
-  background: linear-gradient(#ffe9a8,#ffd36a);
-}
+.upgradeTable { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.upgradeTable.hidden { display: none; }
+.upgradeTable td { padding: 10px 5px; border-bottom: 1px solid #eee; }
 
 #toast {
   position: fixed;
-  top: -80px;
+  top: -100px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 12px 20px;
-  background: linear-gradient(#ffe9a8,#ffd36a);
+  padding: 15px 25px;
+  background: #ffd36a;
   border: 3px solid #7a4a24;
-  border-radius: 14px;
+  border-radius: 50px;
   font-weight: bold;
-  transition: .5s;
-  z-index: 999;
+  transition: 0.5s;
+  z-index: 1000;
 }
-#toast.show { top: 20px; }
+#toast.show { top: 30px; }
 </style>
 </head>
 
@@ -178,82 +143,77 @@ button:active { transform: scale(.96); }
 <audio id="sAch" src="Achievement.wav" preload="auto"></audio>
 
 <div id="loginBox">
-  <input id="pinInput" type="password" placeholder="Enter PIN">
-  <button onclick="login()">Login</button>
+  <h2>Enter Bakery PIN</h2>
+  <input id="pinInput" type="password" placeholder="PIN" style="padding:10px; border-radius:8px;">
+  <button onclick="login()">Enter</button>
 </div>
 
 <div class="stats">
-  <div>Cookies: <span id="count">0</span></div>
-  <div>CPS: <span id="cps">0</span></div>
-  <div>Total Clicks: <span id="totalClicks">0</span></div>
-  <div>Purchases: <span id="totalPurchases">0</span></div>
+  <div class="stat-item"><span class="stat-label">Cookies</span><span id="count" class="stat-value">0</span></div>
+  <div class="stat-item"><span class="stat-label">Gems</span><span id="gems" class="stat-value gem-count">0</span></div>
+  <div class="stat-item"><span class="stat-label">Per Second</span><span id="cps" class="stat-value">0</span></div>
+  <div class="stat-item"><span class="stat-label">Lifetime Clicks</span><span id="totalClicks" class="stat-value">0</span></div>
 </div>
 
 <button class="cookie-btn" onclick="clickCookie()"></button>
-<div style="display:flex; gap:10px;">
-  <button onclick="openPanel('upgrades')">Upgrades ↑</button>
-  <button onclick="openPanel('achievements')">Achievements 🏆</button>
+
+<div style="display:flex; gap:15px;">
+  <button onclick="openPanel('upgrades')">Shop ↑</button>
+  <button onclick="openPanel('achievements')">Trophies 🏆</button>
 </div>
 
 <div id="upgrades" class="panel">
-  <button class="close-panel" onclick="closePanels()">✕</button>
-  <div class="upgrade-section" id="upgradeTables"></div>
+  <button style="float:left" onclick="closePanels()">Back</button>
+  <h2 style="text-align:center">Bakery Shop</h2>
+  <div id="upgradeTables"></div>
 </div>
 
 <div id="achievements" class="panel">
-  <button class="close-panel" onclick="closePanels()">✕</button>
-  <ul id="achievementList"></ul>
+  <button style="float:left" onclick="closePanels()">Back</button>
+  <h2 style="text-align:center">Achievements</h2>
+  <ul id="achievementList" style="padding:0"></ul>
 </div>
 
 <div id="toast"></div>
 
 <script>
 /* STATE */
-let cookies = 0, cps = 0, clickPower = 1, pin = null;
-let aI = 0, pI = 0;
-let unlocked = {};
-let totalClicks = 0;
-let totalPurchases = 0;
-let playSeconds = 0;
+let cookies = 0, gems = 0, cps = 0, clickPower = 1, pin = null;
+let aI = 0, pI = 0, unlocked = {}, totalClicks = 0, totalPurchases = 0, playSeconds = 0;
 
 const active = [
- ["Sugar Spoon",25,"+1 CPC",1],
- ["Golden Spoon",120,"+3 CPC",3],
- ["Diamond Spoon",600,"+8 CPC",8],
- ["Magic Whisk",3000,"+20 CPC",20]
+ ["Sugar Spoon", 25, "+1 CPC", 1],
+ ["Golden Spoon", 150, "+4 CPC", 4],
+ ["Diamond Whisk", 800, "+12 CPC", 12],
+ ["Magic Rolling Pin", 4500, "+40 CPC", 40],
+ ["Quantum Clicker", 25000, "+150 CPC", 150],
+ ["Hyper-Press", 100000, "+500 CPC", 500]
 ];
 
 const passive = [
- ["Grandma",250,"+1 CPS",1],
- ["Oven",1200,"+4 CPS",4],
- ["Bakery",6000,"+12 CPS",12],
- ["Factory",30000,"+35 CPS",35]
+ ["Grandma", 50, "+1 CPS", 1],
+ ["Oven", 300, "+5 CPS", 5],
+ ["Bakery", 2000, "+15 CPS", 15],
+ ["Factory", 12000, "+50 CPS", 50],
+ ["Industrial Mixer", 60000, "+180 CPS", 180],
+ ["Cookie Planet", 500000, "+1200 CPS", 1200]
 ];
 
 const achievements = [
- {id:"c1",n:"First Click",d:"Click the cookie once",c:()=>cookies>=1},
- {id:"c100",n:"Cookie Lover",d:"Have 100 cookies",c:()=>cookies>=100},
- {id:"c1000",n:"Cookie Hoarder",d:"Have 1,000 cookies",c:()=>cookies>=1000},
- {id:"c1m",n:"Millionaire",d:"Have 1,000,000 cookies",c:()=>cookies>=1000000},
- {id:"up1",n:"First Upgrade",d:"Buy any upgrade",c:()=>totalPurchases>=1},
- {id:"cps50",n:"Automation II",d:"Reach 50 CPS",c:()=>cps>=50},
- {id:"play5m",n:"Warmup",d:"Play for 5 minutes",c:()=>playSeconds>=300}
+ {id:"c1", n:"First Batch", d:"Click once", g:5, c:()=>cookies>=1},
+ {id:"c1k", n:"Cookie Pro", d:"1,000 cookies", g:10, c:()=>cookies>=1000},
+ {id:"c100k", n:"Cookie Tycoon", d:"100,000 cookies", g:25, c:()=>cookies>=100000},
+ {id:"p10", n:"Investor", d:"10 purchases", g:10, c:()=>totalPurchases>=10},
+ {id:"cps100", n:"Automated", d:"100 CPS", g:20, c:()=>cps>=100}
 ];
 
 const $ = i => document.getElementById(i);
 
-/* AUDIO */
-function playSnd(id) {
-  const a = $(id);
-  if (a) { a.currentTime = 0; a.play().catch(()=>{}); }
-}
-
-/* UI */
 function updateUI(){
  $("count").textContent = Math.floor(cookies);
+ $("gems").textContent = gems;
  $("cps").textContent = cps;
  $("totalClicks").textContent = totalClicks;
- $("totalPurchases").textContent = totalPurchases;
  renderUpgrades();
  renderAchievements();
 }
@@ -261,117 +221,83 @@ function updateUI(){
 function renderUpgrades(){
  const container = $("upgradeTables");
  container.innerHTML = "";
- renderTable(container, "Active (Click Power)", active, aI, buyActive);
- renderTable(container, "Passive (CPS)", passive, pI, buyPassive);
+ renderSection(container, "Clicking Upgrades", active, aI, buyActive, "active");
+ renderSection(container, "Passive Income", passive, pI, buyPassive, "passive");
 }
 
-function renderTable(target, title, data, ownedIdx, buyFn) {
+function renderSection(target, title, data, ownedIdx, buyFn, idPrefix) {
  const card = document.createElement("div");
  card.className = "upgrade-card";
- card.innerHTML = `<h3>${title}</h3>`;
+ 
+ const isHidden = localStorage.getItem("hide_"+idPrefix) === "true";
+ 
+ card.innerHTML = `
+    <button class="toggle-btn" onclick="toggleSection('${idPrefix}')">${isHidden ? '↑' : '↓'}</button>
+    <h3 style="margin:0">${title}</h3>
+ `;
+ 
  const table = document.createElement("table");
- table.className = "upgradeTable";
- table.innerHTML = `<thead><tr><th>Name</th><th>Cost</th><th>Action</th></tr></thead>`;
- const body = document.createElement("tbody");
+ table.className = "upgradeTable" + (isHidden ? " hidden" : "");
+ 
  data.forEach((u, idx) => {
   const tr = document.createElement("tr");
-  const actionCell = document.createElement("td");
-  if (idx < ownedIdx) {
-    actionCell.textContent = "Owned";
-  } else if (idx === ownedIdx) {
-    const btn = document.createElement("button");
-    btn.textContent = "Buy";
-    btn.disabled = cookies < u[1];
-    btn.onclick = () => buyFn(idx);
-    actionCell.appendChild(btn);
-  } else {
-    actionCell.textContent = "Locked";
-  }
-  tr.innerHTML = `<td>${u[0]}<br><small>${u[2]}</small></td><td>${u[1]}</td>`;
-  tr.appendChild(actionCell);
-  body.appendChild(tr);
+  let action = idx < ownedIdx ? "Owned" : (idx === ownedIdx ? `<button onclick="event.stopPropagation(); buyUpgrade(${idx}, '${idPrefix}')" ${cookies < u[1] ? 'disabled' : ''}>Buy</button>` : "Locked");
+  tr.innerHTML = `<td><b>${u[0]}</b><br><small>${u[2]}</small></td><td>🍪 ${u[1]}</td><td>${action}</td>`;
+  table.appendChild(tr);
  });
- table.appendChild(body);
+ 
  card.appendChild(table);
  target.appendChild(card);
 }
 
-/* GAMEPLAY */
-function clickCookie(){
- cookies += clickPower;
- totalClicks++;
- playSnd("sClick");
- checkAchievements();
+function toggleSection(id) {
+ const key = "hide_" + id;
+ localStorage.setItem(key, localStorage.getItem(key) === "true" ? "false" : "true");
  updateUI();
+}
+
+function buyUpgrade(idx, type) {
+ if (type === 'active') buyActive(idx); else buyPassive(idx);
+}
+
+function clickCookie(){
+ cookies += clickPower; totalClicks++;
+ playSnd("sClick"); checkAchievements(); updateUI();
 }
 
 function buyActive(index){
  if (index !== aI || cookies < active[index][1]) return;
- cookies -= active[index][1];
- clickPower += active[index][3];
- aI++;
- totalPurchases++;
- playSnd("sBuy");
- checkAchievements();
- updateUI();
+ cookies -= active[index][1]; clickPower += active[index][3]; aI++; totalPurchases++;
+ finishBuy();
 }
 
 function buyPassive(index){
  if (index !== pI || cookies < passive[index][1]) return;
- cookies -= passive[index][1];
- cps += passive[index][3];
- pI++;
- totalPurchases++;
- playSnd("sBuy");
- checkAchievements();
- updateUI();
+ cookies -= passive[index][1]; cps += passive[index][3]; pI++; totalPurchases++;
+ finishBuy();
 }
 
-/* ACHIEVEMENTS */
-function renderAchievements(){
- let ul = $("achievementList"); ul.innerHTML = "";
- achievements.forEach(a=>{
-  let li = document.createElement("li");
-  li.innerHTML = `<b>${a.n}</b><br>${a.d}`;
-  if(unlocked[a.id]) li.classList.add("unlocked");
-  ul.appendChild(li);
- });
-}
+function finishBuy() { playSnd("sBuy"); save(); updateUI(); checkAchievements(); }
 
 function checkAchievements(){
  achievements.forEach(a=>{
   if(!unlocked[a.id] && a.c()){
    unlocked[a.id] = 1;
-   toast("🏆 " + a.n);
-   playSnd("sAch");
-   save();
+   gems += a.g;
+   toast(`🏆 ${a.n} (+${a.g} Gems)`);
+   playSnd("sAch"); save();
   }
  });
 }
 
-function toast(t){
- let d = $("toast");
- d.textContent = t;
- d.classList.add("show");
- setTimeout(()=>d.classList.remove("show"),2500);
-}
+function playSnd(id) { const a = $(id); if(a){ a.currentTime=0; a.play().catch(()=>{}); }}
+function toast(t){ let d=$("toast"); d.textContent=t; d.classList.add("show"); setTimeout(()=>d.classList.remove("show"),3000); }
+function openPanel(id){ closePanels(); $(id).classList.add("active"); }
+function closePanels(){ $("upgrades").classList.remove("active"); $("achievements").classList.remove("active"); }
 
-/* PANELS */
-function openPanel(id){
- closePanels();
- $(id).classList.add("active");
-}
-function closePanels(){
- $("upgrades").classList.remove("active");
- $("achievements").classList.remove("active");
-}
-
-/* STORAGE */
 function save(){
  if(!pin) return;
- localStorage.setItem("cookie_"+pin, JSON.stringify({
-   cookies, aI, pI, unlocked, totalClicks, totalPurchases, playSeconds
- }));
+ localStorage.setItem("cookie_"+pin, JSON.stringify({cookies, gems, aI, pI, unlocked, totalClicks, totalPurchases, playSeconds}));
 }
 
 function login(){
@@ -380,15 +306,9 @@ function login(){
  try {
   let d = JSON.parse(localStorage.getItem("cookie_"+pin));
   if(d){
-   cookies = d.cookies || 0;
-   aI = d.aI || 0;
-   pI = d.pI || 0;
-   unlocked = d.unlocked || {};
-   totalClicks = d.totalClicks || 0;
-   totalPurchases = d.totalPurchases || 0;
-   playSeconds = d.playSeconds || 0;
-   
-   // Recalculate stats to support global balancing changes
+   cookies=d.cookies||0; gems=d.gems||0; aI=d.aI||0; pI=d.pI||0; 
+   unlocked=d.unlocked||{}; totalClicks=d.totalClicks||0; 
+   totalPurchases=d.totalPurchases||0; playSeconds=d.playSeconds||0;
    clickPower = 1 + active.slice(0, aI).reduce((s, u) => s + u[3], 0);
    cps = passive.slice(0, pI).reduce((s, u) => s + u[3], 0);
   }
@@ -397,14 +317,26 @@ function login(){
  updateUI();
 }
 
-/* TICKER */
+function renderAchievements(){
+ let ul = $("achievementList"); ul.innerHTML = "";
+ achievements.forEach(a=>{
+  let li = document.createElement("li");
+  li.style.listStyle = "none";
+  li.style.padding = "10px";
+  li.style.margin = "5px 0";
+  li.style.borderRadius = "10px";
+  li.style.border = "2px solid #7a4a24";
+  li.style.background = unlocked[a.id] ? "#ffd36a" : "#eee";
+  li.style.opacity = unlocked[a.id] ? "1" : "0.5";
+  li.innerHTML = `<b>${a.n}</b><br><small>${a.d}</small><br><b style="color:#008cff">+${a.g} Gems</b>`;
+  ul.appendChild(li);
+ });
+}
+
 setInterval(()=>{
-  if(!pin) return; // Only process income/time if logged in
-  cookies += cps;
-  playSeconds++;
-  checkAchievements(); // Now checks passive progress every second
-  save();
-  updateUI();
+  if(!pin) return;
+  cookies += cps; playSeconds++;
+  checkAchievements(); save(); updateUI();
 }, 1000);
 
 updateUI();
