@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="manifest.json">
-<title>COOKIE V-2.1</title>
+<title>COOKIE V-2.2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -453,7 +453,7 @@ function checkAchievements(){
  achievements.forEach(a=>{
   if(!unlocked[a.id] && a.c()){
    unlocked[a.id] = 1;
-   toast("🏆 "+a.n);
+   toast("🏆"+a.n);
    playAchievement();
    save();
   }
@@ -478,39 +478,62 @@ function closePanels(){
 }
 
 /* SAVE */
+/* SAVE - Now includes CPC and CPS specifically */
 function save(){
  if(!pin) return;
  try {
-  localStorage.setItem("cookie_"+pin,JSON.stringify({
-   cookies,cps,clickPower,aI,pI,unlocked,
-   totalClicks,totalPurchases,playSeconds
+  localStorage.setItem("cookie_"+pin, JSON.stringify({
+   cookies,
+   cps,
+   clickPower,
+   aI,
+   pI,
+   unlocked,
+   totalClicks,
+   totalPurchases,
+   playSeconds
   }));
  } catch (e) {
   console.error("Save failed", e);
  }
 }
 
+/* LOGIN - Fixed to recalculate stats on load */
 function login(){
  pin = $("pinInput").value.trim();
  if(!pin) return alert("Enter PIN");
  try {
   let d = JSON.parse(localStorage.getItem("cookie_"+pin));
   if(d){
-   cookies = typeof d.cookies === "number" ? d.cookies : cookies;
-   cps = typeof d.cps === "number" ? d.cps : cps;
-   clickPower = typeof d.clickPower === "number" ? d.clickPower : clickPower;
-   aI = typeof d.aI === "number" ? d.aI : aI;
-   pI = typeof d.pI === "number" ? d.pI : pI;
-   unlocked = d.unlocked && typeof d.unlocked === "object" ? d.unlocked : unlocked;
-   totalClicks = typeof d.totalClicks === "number" ? d.totalClicks : totalClicks;
-   totalPurchases = typeof d.totalPurchases === "number" ? d.totalPurchases : totalPurchases;
-   playSeconds = typeof d.playSeconds === "number" ? d.playSeconds : playSeconds;
+   // Restore basic stats
+   cookies = d.cookies || 0;
+   aI = d.aI || 0;
+   pI = d.pI || 0;
+   unlocked = d.unlocked || {};
+   totalClicks = d.totalClicks || 0;
+   totalPurchases = d.totalPurchases || 0;
+   playSeconds = d.playSeconds || 0;
+
+   // RECALCULATE Click Power (CPC) based on owned upgrades
+   let baseClick = 1;
+   for(let i = 0; i < aI; i++) {
+     baseClick += active[i][3];
+   }
+   clickPower = baseClick;
+
+   // RECALCULATE CPS based on owned upgrades
+   let baseCPS = 0;
+   for(let i = 0; i < pI; i++) {
+     baseCPS += passive[i][3];
+   }
+   cps = baseCPS;
   }
  } catch (e) {
   console.error("Load failed", e);
  }
  $("loginBox").style.display = "none";
- updateUI(); checkAchievements();
+ updateUI(); 
+ checkAchievements();
 }
 
 /* PASSIVE */
