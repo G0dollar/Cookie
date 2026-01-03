@@ -15,9 +15,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)), url("wood.jpg");
+  background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url("wood.jpg");
   background-size: cover;
   color: #4b2e18;
+  min-height: 100vh;
 }
 
 /* BUTTONS */
@@ -38,6 +39,7 @@ button:active { transform: scale(.96); }
   border-radius: 14px;
   background: linear-gradient(#fff8e1, #edd2a5);
   border: 3px solid #8b5a2b;
+  z-index: 1000;
 }
 
 /* STATS */
@@ -62,7 +64,7 @@ button:active { transform: scale(.96); }
   border-radius: 50%;
   border: none;
   margin: 20px;
-  background: radial-gradient(circle at top left,#fff5,#0005), url("Cookies.jpg");
+  background: radial-gradient(circle at top left,rgba(255,255,255,0.3),rgba(0,0,0,0.3)), url("Cookies.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -80,14 +82,13 @@ button:active { transform: scale(.96); }
   bottom: 0;
   width: 100%;
   max-width: 900px;
-  /* Added max-height and scrolling for the panel itself */
   max-height: 85vh; 
   overflow-y: auto;
   background: linear-gradient(#fff,#e8e0d0);
   transition: .35s;
   border-radius: 20px 20px 0 0;
   border-top: 6px solid #6b3e1e;
-  padding: 20px; /* Increased padding for better spacing */
+  padding: 20px;
   left: 50%;
   transform: translate(-50%, 110%);
   z-index: 100;
@@ -98,14 +99,13 @@ button:active { transform: scale(.96); }
 }
 
 .close-panel {
-  position: sticky; /* Keeps the button visible while scrolling */
+  position: sticky;
   top: 0;
   float: right;
   width: 35px;
   height: 35px;
   border-radius: 50%;
   font-weight: bold;
-  /* Centering the X perfectly */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,7 +113,6 @@ button:active { transform: scale(.96); }
   margin-bottom: 10px;
 }
 
-/* NEW: Upgrade tables */
 .upgrade-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -122,13 +121,13 @@ button:active { transform: scale(.96); }
 @media (max-width: 720px) {
   .upgrade-section { grid-template-columns: 1fr; }
 }
+
 .upgrade-card {
   background: linear-gradient(#fff8e1,#edd2a5);
   border: 2px solid #7a4a24;
   border-radius: 10px;
   padding: 10px;
 }
-.upgrade-card h3 { margin: 6px 0; font-size: 1.05em; }
 .upgradeTable {
   width: 100%;
   border-collapse: collapse;
@@ -138,22 +137,9 @@ button:active { transform: scale(.96); }
   border-bottom: 1px solid rgba(122,74,36,.15);
   padding: 8px 6px;
   text-align: left;
-  vertical-align: middle;
   font-size: 0.95em;
 }
-.upgradeTable th { font-weight: bold; font-size: 0.95em; }
-.buy-btn {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 2px solid #567;
-  background: linear-gradient(#fff,#e6f2ff);
-}
-.buy-btn:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
 
-/* ACHIEVEMENTS */
 #achievementList li {
   list-style: none;
   margin: 6px 0;
@@ -167,14 +153,7 @@ button:active { transform: scale(.96); }
   opacity: 1;
   background: linear-gradient(#ffe9a8,#ffd36a);
 }
-  #achievementList {
-  padding: 0;
-  margin-top: 40px; /* Space for the close button */
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  }
-/* TOAST */
+
 #toast {
   position: fixed;
   top: -80px;
@@ -186,7 +165,7 @@ button:active { transform: scale(.96); }
   border-radius: 14px;
   font-weight: bold;
   transition: .5s;
-  z-index: 99;
+  z-index: 999;
 }
 #toast.show { top: 20px; }
 </style>
@@ -211,21 +190,19 @@ button:active { transform: scale(.96); }
 </div>
 
 <button class="cookie-btn" onclick="clickCookie()"></button>
-<button onclick="openPanel('upgrades')">Upgrades ↑</button>
-<button onclick="openPanel('achievements')">Achievements 🏆</button>
-
-<!-- UPGRADES (NEW TABLE UI) -->
-<div id="upgrades" class="panel">
-  <button class="close-panel" onclick="closePanels()">✕</button>
-  <div class="upgrade-section" id="upgradeTables">
-    <!-- tables are rendered by JS -->
-  </div>
+<div style="display:flex; gap:10px;">
+  <button onclick="openPanel('upgrades')">Upgrades ↑</button>
+  <button onclick="openPanel('achievements')">Achievements 🏆</button>
 </div>
 
-<!-- ACHIEVEMENTS -->
+<div id="upgrades" class="panel">
+  <button class="close-panel" onclick="closePanels()">✕</button>
+  <div class="upgrade-section" id="upgradeTables"></div>
+</div>
+
 <div id="achievements" class="panel">
-<button class="close-panel" onclick="closePanels()">✕</button>
-<ul id="achievementList"></ul>
+  <button class="close-panel" onclick="closePanels()">✕</button>
+  <ul id="achievementList"></ul>
 </div>
 
 <div id="toast"></div>
@@ -235,10 +212,9 @@ button:active { transform: scale(.96); }
 let cookies = 0, cps = 0, clickPower = 1, pin = null;
 let aI = 0, pI = 0;
 let unlocked = {};
-
 let totalClicks = 0;
 let totalPurchases = 0;
-let playSeconds = 0; // total seconds played (persisted)
+let playSeconds = 0;
 
 const active = [
  ["Sugar Spoon",25,"+1 CPC",1],
@@ -256,47 +232,20 @@ const passive = [
 
 const achievements = [
  {id:"c1",n:"First Click",d:"Click the cookie once",c:()=>cookies>=1},
- {id:"c10",n:"Getting Warm",d:"Have 10 cookies",c:()=>cookies>=10},
  {id:"c100",n:"Cookie Lover",d:"Have 100 cookies",c:()=>cookies>=100},
  {id:"c1000",n:"Cookie Hoarder",d:"Have 1,000 cookies",c:()=>cookies>=1000},
- {id:"c10k",n:"Cookie Hoarder II",d:"Have 10,000 cookies",c:()=>cookies>=10000},
- {id:"c100k",n:"Cookie Baron",d:"Have 100,000 cookies",c:()=>cookies>=100000},
  {id:"c1m",n:"Millionaire",d:"Have 1,000,000 cookies",c:()=>cookies>=1000000},
- {id:"up1",n:"First Upgrade",d:"Buy any upgrade",c:()=>aI+pI>=1},
- {id:"up5",n:"Investor",d:"Buy 5 upgrades",c:()=>aI+pI>=5},
- {id:"buy10",n:"Investor II",d:"Buy 10 upgrades",c:()=>totalPurchases>=10},
- {id:"buy50",n:"Investment Guru",d:"Buy 50 upgrades",c:()=>totalPurchases>=50},
- {id:"cpc25",n:"Click Master",d:"Reach 25 CPC",c:()=>clickPower>=25},
- {id:"cpc100",n:"Click God",d:"Reach 100 CPC",c:()=>clickPower>=100},
- {id:"cps10",n:"Automation I",d:"Reach 10 CPS",c:()=>cps>=10},
+ {id:"up1",n:"First Upgrade",d:"Buy any upgrade",c:()=>totalPurchases>=1},
  {id:"cps50",n:"Automation II",d:"Reach 50 CPS",c:()=>cps>=50},
- {id:"cps200",n:"Automation III",d:"Reach 200 CPS",c:()=>cps>=200},
- {id:"click100",n:"Clickstorm",d:"Click 100 times",c:()=>totalClicks>=100},
- {id:"click1000",n:"Click Marathon",d:"Click 1,000 times",c:()=>totalClicks>=1000},
- {id:"play5m",n:"Warmup",d:"Play for 5 minutes",c:()=>playSeconds>=300},
- {id:"play1h",n:"Veteran",d:"Play for 1 hour",c:()=>playSeconds>=3600}
+ {id:"play5m",n:"Warmup",d:"Play for 5 minutes",c:()=>playSeconds>=300}
 ];
 
 const $ = i => document.getElementById(i);
-function playClick() {
-  const a = $("sClick");
-  if (!a) return;
-  a.currentTime = 0;
-  a.play().catch(()=>{});
-}
 
-function playUpgrade() {
-  const a = $("sBuy");
-  if (!a) return;
-  a.currentTime = 0;
-  a.play().catch(()=>{});
-}
-
-function playAchievement() {
-  const a = $("sAch");
-  if (!a) return;
-  a.currentTime = 0;
-  a.play().catch(()=>{});
+/* AUDIO */
+function playSnd(id) {
+  const a = $(id);
+  if (a) { a.currentTime = 0; a.play().catch(()=>{}); }
 }
 
 /* UI */
@@ -309,133 +258,73 @@ function updateUI(){
  renderAchievements();
 }
 
-/* RENDER UPGRADES (tabular) */
 function renderUpgrades(){
  const container = $("upgradeTables");
  container.innerHTML = "";
-
- // Active upgrades table
- const activeCard = document.createElement("div");
- activeCard.className = "upgrade-card";
- const ah = document.createElement("h3");
- ah.textContent = "Active Upgrades (Click Power)";
- activeCard.appendChild(ah);
- const at = document.createElement("table");
- at.className = "upgradeTable";
- let thead = document.createElement("thead");
- thead.innerHTML = "<tr><th>#</th><th>Name</th><th>Description</th><th>Cost</th><th>Action</th></tr>";
- at.appendChild(thead);
- const abody = document.createElement("tbody");
- active.forEach((u, idx) => {
-  const tr = document.createElement("tr");
-  const colIndex = document.createElement("td"); colIndex.textContent = idx+1;
-  const colName = document.createElement("td"); colName.textContent = u[0];
-  const colDesc = document.createElement("td"); colDesc.textContent = u[2];
-  const colCost = document.createElement("td"); colCost.textContent = u[1];
-  const colAction = document.createElement("td");
-  if (idx < aI) {
-    colAction.textContent = "Owned";
-  } else if (idx === aI) {
-    const btn = document.createElement("button");
-    btn.className = "buy-btn";
-    btn.textContent = "Buy";
-    btn.disabled = cookies < u[1];
-    btn.onclick = ()=> buyActive(idx);
-    colAction.appendChild(btn);
-  } else {
-    colAction.textContent = "Locked";
-  }
-  tr.appendChild(colIndex);
-  tr.appendChild(colName);
-  tr.appendChild(colDesc);
-  tr.appendChild(colCost);
-  tr.appendChild(colAction);
-  abody.appendChild(tr);
- });
- at.appendChild(abody);
- activeCard.appendChild(at);
-
- // Passive upgrades table
- const passiveCard = document.createElement("div");
- passiveCard.className = "upgrade-card";
- const ph = document.createElement("h3");
- ph.textContent = "Passive Upgrades (CPS)";
- passiveCard.appendChild(ph);
- const pt = document.createElement("table");
- pt.className = "upgradeTable";
- let pthead = document.createElement("thead");
- pthead.innerHTML = "<tr><th>#</th><th>Name</th><th>Description</th><th>Cost</th><th>Action</th></tr>";
- pt.appendChild(pthead);
- const pbody = document.createElement("tbody");
- passive.forEach((u, idx) => {
-  const tr = document.createElement("tr");
-  const colIndex = document.createElement("td"); colIndex.textContent = idx+1;
-  const colName = document.createElement("td"); colName.textContent = u[0];
-  const colDesc = document.createElement("td"); colDesc.textContent = u[2];
-  const colCost = document.createElement("td"); colCost.textContent = u[1];
-  const colAction = document.createElement("td");
-  if (idx < pI) {
-    colAction.textContent = "Owned";
-  } else if (idx === pI) {
-    const btn = document.createElement("button");
-    btn.className = "buy-btn";
-    btn.textContent = "Buy";
-    btn.disabled = cookies < u[1];
-    btn.onclick = ()=> buyPassive(idx);
-    colAction.appendChild(btn);
-  } else {
-    colAction.textContent = "Locked";
-  }
-  tr.appendChild(colIndex);
-  tr.appendChild(colName);
-  tr.appendChild(colDesc);
-  tr.appendChild(colCost);
-  tr.appendChild(colAction);
-  pbody.appendChild(tr);
- });
- pt.appendChild(pbody);
- passiveCard.appendChild(pt);
-
- container.appendChild(activeCard);
- container.appendChild(passiveCard);
+ renderTable(container, "Active (Click Power)", active, aI, buyActive);
+ renderTable(container, "Passive (CPS)", passive, pI, buyPassive);
 }
 
-/* GAME */
+function renderTable(target, title, data, ownedIdx, buyFn) {
+ const card = document.createElement("div");
+ card.className = "upgrade-card";
+ card.innerHTML = `<h3>${title}</h3>`;
+ const table = document.createElement("table");
+ table.className = "upgradeTable";
+ table.innerHTML = `<thead><tr><th>Name</th><th>Cost</th><th>Action</th></tr></thead>`;
+ const body = document.createElement("tbody");
+ data.forEach((u, idx) => {
+  const tr = document.createElement("tr");
+  const actionCell = document.createElement("td");
+  if (idx < ownedIdx) {
+    actionCell.textContent = "Owned";
+  } else if (idx === ownedIdx) {
+    const btn = document.createElement("button");
+    btn.textContent = "Buy";
+    btn.disabled = cookies < u[1];
+    btn.onclick = () => buyFn(idx);
+    actionCell.appendChild(btn);
+  } else {
+    actionCell.textContent = "Locked";
+  }
+  tr.innerHTML = `<td>${u[0]}<br><small>${u[2]}</small></td><td>${u[1]}</td>`;
+  tr.appendChild(actionCell);
+  body.appendChild(tr);
+ });
+ table.appendChild(body);
+ card.appendChild(table);
+ target.appendChild(card);
+}
+
+/* GAMEPLAY */
 function clickCookie(){
  cookies += clickPower;
  totalClicks++;
- playClick();
- save(); updateUI(); checkAchievements();
+ playSnd("sClick");
+ checkAchievements();
+ updateUI();
 }
 
 function buyActive(index){
- let u = active[index];
- if (!u) return;
- if (index !== aI) return; // can only buy the next one in sequence
- if (cookies < u[1]) {
-   toast("Not enough cookies");
-   return;
- }
- cookies -= u[1];
- clickPower += u[3];
+ if (index !== aI || cookies < active[index][1]) return;
+ cookies -= active[index][1];
+ clickPower += active[index][3];
  aI++;
  totalPurchases++;
- playUpgrade(); save(); updateUI(); checkAchievements();
+ playSnd("sBuy");
+ checkAchievements();
+ updateUI();
 }
 
 function buyPassive(index){
- let u = passive[index];
- if (!u) return;
- if (index !== pI) return; // can only buy the next one in sequence
- if (cookies < u[1]) {
-   toast("Not enough cookies");
-   return;
- }
- cookies -= u[1];
- cps += u[3];
+ if (index !== pI || cookies < passive[index][1]) return;
+ cookies -= passive[index][1];
+ cps += passive[index][3];
  pI++;
  totalPurchases++;
- playUpgrade(); save(); updateUI(); checkAchievements();
+ playSnd("sBuy");
+ checkAchievements();
+ updateUI();
 }
 
 /* ACHIEVEMENTS */
@@ -443,7 +332,7 @@ function renderAchievements(){
  let ul = $("achievementList"); ul.innerHTML = "";
  achievements.forEach(a=>{
   let li = document.createElement("li");
-  li.innerHTML = "<b>"+a.n+"</b><br>"+a.d;
+  li.innerHTML = `<b>${a.n}</b><br>${a.d}`;
   if(unlocked[a.id]) li.classList.add("unlocked");
   ul.appendChild(li);
  });
@@ -453,8 +342,8 @@ function checkAchievements(){
  achievements.forEach(a=>{
   if(!unlocked[a.id] && a.c()){
    unlocked[a.id] = 1;
-   toast("🏆"+a.n);
-   playAchievement();
+   toast("🏆 " + a.n);
+   playSnd("sAch");
    save();
   }
  });
@@ -477,82 +366,49 @@ function closePanels(){
  $("achievements").classList.remove("active");
 }
 
-/* SAVE */
-/* SAVE - Now includes CPC and CPS specifically */
+/* STORAGE */
 function save(){
  if(!pin) return;
- try {
-  localStorage.setItem("cookie_"+pin, JSON.stringify({
-   cookies,
-   cps,
-   clickPower,
-   aI,
-   pI,
-   unlocked,
-   totalClicks,
-   totalPurchases,
-   playSeconds
-  }));
- } catch (e) {
-  console.error("Save failed", e);
- }
+ localStorage.setItem("cookie_"+pin, JSON.stringify({
+   cookies, aI, pI, unlocked, totalClicks, totalPurchases, playSeconds
+ }));
 }
 
-/* Updated Login to ensure global balance changes apply */
 function login(){
  pin = $("pinInput").value.trim();
  if(!pin) return alert("Enter PIN");
- 
  try {
-  let savedData = JSON.parse(localStorage.getItem("cookie_"+pin));
-  if(savedData){
-   // 1. Restore the "State" (what they have achieved/bought)
-   cookies = savedData.cookies || 0;
-   aI = savedData.aI || 0;
-   pI = savedData.pI || 0;
-   unlocked = savedData.unlocked || {};
-   totalClicks = savedData.totalClicks || 0;
-   totalPurchases = savedData.totalPurchases || 0;
-   playSeconds = savedData.playSeconds || 0;
-
-   // 2. RECALCULATE CPC (Click Power) 
-   // We start at 1, then add the bonus of every owned upgrade
-   let newCPC = 1;
-   for(let i = 0; i < aI; i++) {
-     newCPC += active[i][3]; // Takes the CURRENT value from your 'active' array
-   }
-   clickPower = newCPC;
-
-   // 3. RECALCULATE CPS (Passive Income)
-   let newCPS = 0;
-   for(let i = 0; i < pI; i++) {
-     newCPS += passive[i][3]; // Takes the CURRENT value from your 'passive' array
-   }
-   cps = newCPS;
+  let d = JSON.parse(localStorage.getItem("cookie_"+pin));
+  if(d){
+   cookies = d.cookies || 0;
+   aI = d.aI || 0;
+   pI = d.pI || 0;
+   unlocked = d.unlocked || {};
+   totalClicks = d.totalClicks || 0;
+   totalPurchases = d.totalPurchases || 0;
+   playSeconds = d.playSeconds || 0;
+   
+   // Recalculate stats to support global balancing changes
+   clickPower = 1 + active.slice(0, aI).reduce((s, u) => s + u[3], 0);
+   cps = passive.slice(0, pI).reduce((s, u) => s + u[3], 0);
   }
- } catch (e) {
-  console.error("Load failed", e);
- }
- 
+ } catch (e) {}
  $("loginBox").style.display = "none";
- updateUI(); 
- checkAchievements();
+ updateUI();
 }
 
-
-/* PASSIVE */
+/* TICKER */
 setInterval(()=>{
+  if(!pin) return; // Only process income/time if logged in
   cookies += cps;
   playSeconds++;
+  checkAchievements(); // Now checks passive progress every second
   save();
   updateUI();
 }, 1000);
 
 updateUI();
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(()=>{});
-}
-
 </script>
 </body>
 </html>
+
