@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="manifest.json">
-<title>COOKIE V-3.2</title>
+<title>COOKIE V-3.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -200,13 +200,21 @@ const passive = [
 ];
 
 const achievements = [
- {id:"c1",n:"First Click",d:"Click the cookie once",c:()=>cookies>=1},
- {id:"c100",n:"Cookie Lover",d:"Have 100 cookies",c:()=>cookies>=100},
- {id:"c1000",n:"Cookie Hoarder",d:"Have 1,000 cookies",c:()=>cookies>=1000},
- {id:"c1m",n:"Millionaire",d:"Have 1,000,000 cookies",c:()=>cookies>=1000000},
- {id:"up1",n:"First Upgrade",d:"Buy any upgrade",c:()=>totalPurchases>=1},
- {id:"cps50",n:"Automation II",d:"Reach 50 CPS",c:()=>cps>=50},
- {id:"play5m",n:"Warmup",d:"Play for 5 minutes",c:()=>playSeconds>=300}
+ {id:"c1",n:"First Click",d:"Click the cookie once", g:"5",c:()=>cookies>=1},
+ {id:"c100",n:"Cookie Lover",d:"Have 100 cookies", g:"10",c:()=>cookies>=100},
+ {id:"c1000",n:"Cookie Hoarder",d:"Have 1,000 cookies", g:"15":,c:()=>cookies>=1000},
+ {id:"c10000",n:"Cookie Passionate",d:"Have 10,000 cookies", g:"20":,c:()=>cookies>=10000},
+ {id:"c100000",n:"Cookie Addict",d:"Have 100,000 cookies", g:"25":,c:()=>cookies>=100000},
+ {id:"c1m",n:"Millionaire",d:"Have 1,000,000 cookies", g:"30" ,c:()=>cookies>=1000000},
+ {id:"up1",n:"First Upgrade",d:"Buy any upgrade", g:"5" ,c:()=>totalPurchases>=1}, 
+ {id:"up6",n:"Almost There",d:"Buy any 6 upgrades", g:"25" ,c:()=>totalPurchases>=6},
+ {id:"up12",n:"I'm Max",d:"Buy any 12 upgrades", g:"55" ,c:()=>totalPurchases>=12},
+ {id:"cps5",n:"Automation I",d:"Reach 5 CPS", g:"5" ,c:()=>cps>=5},
+ {id:"cps50",n:"Automation II",d:"Reach 50 CPS", g:"30" ,c:()=>cps>=50},
+ {id:"cps250",n:"Automation III",d:"Reach 250 CPS", g:"60" ,c:()=>cps>=250},
+ {id:"play5m",n:"Warmup",d:"Play for 5 minutes", g:"5" ,c:()=>playSeconds>=300},
+ {id:"play5m",n:"Serious",d:"Play for 30 minutes", g:"30" ,c:()=>playSeconds>=1800},
+ {id:"play5m",n:"Locked In",d:"Play for 1 hour", g:"60" ,c:()=>playSeconds>=3600}
 ];
 
 
