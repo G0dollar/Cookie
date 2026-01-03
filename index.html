@@ -352,6 +352,10 @@ function login(){
 /* PASSIVE */
 setInterval(()=>{cookies+=cps; save(); updateUI();},1000);
 updateUI();
+  if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+  }
+  
 </script>
 </body>
 </html>
