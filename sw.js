@@ -1,4 +1,4 @@
-const CACHE_NAME = "cookie-game-v3.421";
+const CACHE_NAME = "cookie-game-v3.43";
 
 const FILES_TO_CACHE = [
   "./",
